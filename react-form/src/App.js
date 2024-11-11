@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.css'; // Make sure to adjust the path if necessary
+import './App.css';
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +8,8 @@ const App = () => {
     location: '',
     addressSpace: ''
   });
+
+  const [outputUrls, setOutputUrls] = useState({ jsonUrl: null, tfvarsUrl: null });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +21,24 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
+
+    // Format JSON
+    const jsonOutput = JSON.stringify(formData, null, 2);
+    const jsonBlob = new Blob([jsonOutput], { type: 'application/json' });
+    const jsonUrl = URL.createObjectURL(jsonBlob);
+
+    // Format .tfvars
+    const tfvarsOutput = `
+vnet_name = "${formData.vnetName}"
+resource_group_name = "${formData.resourceGroup}"
+location = "${formData.location}"
+address_space = ["${formData.addressSpace}"]
+    `.trim();
+    const tfvarsBlob = new Blob([tfvarsOutput], { type: 'text/plain' });
+    const tfvarsUrl = URL.createObjectURL(tfvarsBlob);
+
+    // Set download links for JSON and .tfvars files
+    setOutputUrls({ jsonUrl, tfvarsUrl });
   };
 
   return (
@@ -80,9 +99,17 @@ const App = () => {
 
         <button type="submit" className="submit-button">Submit</button>
       </form>
+
+      {outputUrls.jsonUrl && (
+        <div className="output-links">
+          <h3>Download Outputs</h3>
+          <a href={outputUrls.jsonUrl} download="output.json">Download JSON Format</a>
+          <br />
+          <a href={outputUrls.tfvarsUrl} download="output.tfvars">Download Terraform Format (.tfvars)</a>
+        </div>
+      )}
     </div>
   );
 };
 
 export default App;
-

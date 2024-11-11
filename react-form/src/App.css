@@ -61,3 +61,39 @@
 .submit-button:hover {
   background-color: #0056b3;
 }
+.output-container {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.output-container h3 {
+  margin-top: 0;
+}
+
+.output-container pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.output-links {
+  margin-top: 20px;
+}
+
+.output-links h3 {
+  margin-bottom: 10px;
+}
+
+.output-links a {
+  display: block;
+  margin: 5px 0;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.output-links a:hover {
+  text-decoration: underline;
+}
+
